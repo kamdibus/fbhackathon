@@ -28,7 +28,7 @@ function isAllDisabled() {
 // hack, I do it before page loads
 // for (i in document.images) {
 // 		var image = document.images[i];
-		
+
 // 		console.log(isBigEnough(image));
 // 		if (isBigEnough(image)) {
 // 			image.srcset = newSrcList;
@@ -37,100 +37,100 @@ function isAllDisabled() {
 // 	}
 
 window.addEventListener('load', function () {
-	var body = document.body;
-	var elements = document.body.getElementsByTagName("*");
+  	var body = document.body;
+  	var elements = document.body.getElementsByTagName("*");
 
-	for (i in document.images) {
-		var image = document.images[i];
+  	for (i in document.images) {
+  		var image = document.images[i];
 
-		console.log(image.src);
-		if (isBigEnough(image)) {
-			image.srcset = newSrcList;
-			image.src = bmo;
-		}
-	}
-	
-	Array.prototype.forEach.call( elements, function ( el ) {
-		var style = window.getComputedStyle( el, false );
-		if ( el.tagName === "IMG" || el.tagName === "img") {
-			images.push( el.src ); // save image src
-			image_parents.push( el.parentNode ); // save image parent
-			console.log(el.src);
-			if (isBigEnough(el))
-				el.src = jake;
-		}
-		if ( style.backgroundImage != "none" ) {
-			bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, "")); // save background image url
-		}
-	});
+  		console.log(image.src);
+  		if (isBigEnough(image)) {
+  			image.srcset = newSrcList;
+  			image.src = bmo;
+  		}
+  	}
 
-	/* MutationObserver callback to add images when the body changes */
-	var callback = function( mutationsList, observer ){
-		chrome.storage.sync.get("enabledPlugin", function(result) {
-			if (result === undefined)
-				return;
+  	Array.prototype.forEach.call( elements, function ( el ) {
+  		var style = window.getComputedStyle( el, false );
+  		if ( el.tagName === "IMG" || el.tagName === "img") {
+  			images.push( el.src ); // save image src
+  			image_parents.push( el.parentNode ); // save image parent
+  			console.log(el.src);
+  			if (isBigEnough(el))
+  				el.src = jake;
+  		}
+  		if ( style.backgroundImage != "none" ) {
+  			bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, "")); // save background image url
+  		}
+  	});
 
-			if (result.enabledPlugin) {
-				console.log('mutacja:');
-				console.log(mutationsList);
-				//console.log(mutationsList[0]);
-				for (i = 0; i < mutationsList.length; i++ ) {
-					console.log('mutacja ' + i.toString());
-					var mutation = mutationsList[i];
+  	/* MutationObserver callback to add images when the body changes */
+  	var callback = function( mutationsList, observer ){
+  		chrome.storage.sync.get("enabledPlugin", function(result) {
+  			if (result === undefined)
+  				return;
 
-					if (mutation.target.tagName == "IMG") {
-						console.log('mutacja fotki');
-						if (!our_images.includes(mutation.target.src)) {
-							console.log('nie zawiera');
-							if (isBigEnough(mutation.target)) {
-								console.log('changed img');
-								console.log(mutation.target);
-								mutation.target.src = bmo;
-								mutation.target.srcset = newSrcList;
-							}
-						}
-					}
+  			if (result.enabledPlugin) {
+  				console.log('mutacja:');
+  				console.log(mutationsList);
+  				//console.log(mutationsList[0]);
+  				for (i = 0; i < mutationsList.length; i++ ) {
+  					console.log('mutacja ' + i.toString());
+  					var mutation = mutationsList[i];
 
-					if ( mutation.type == 'childList' ) {
+  					if (mutation.target.tagName == "IMG") {
+  						console.log('mutacja fotki');
+  						if (!our_images.includes(mutation.target.src)) {
+  							console.log('nie zawiera');
+  							if (isBigEnough(mutation.target)) {
+  								console.log('changed img');
+  								console.log(mutation.target);
+  								mutation.target.src = bmo;
+  								mutation.target.srcset = newSrcList;
+  							}
+  						}
+  					}
 
-						var imagesChildren = mutation.target.getElementsByTagName("IMG");
-						for (imgChild in imagesChildren) {
-							console.log(imagesChildren[imgChild].src);
-							if (isBigEnough(imagesChildren[imgChild]))
-								imagesChildren[imgChild].srcset = newSrcList;
-						}
+  					if ( mutation.type == 'childList' ) {
 
-						Array.prototype.forEach.call( mutation.target.children, function ( child ) {
-							var style = child.currentStyle || window.getComputedStyle(child, false);
-							if ( child.tagName === "IMG" || child.tagName === "img") {
-								images.push( child.src ); // save image src
-								image_parents.push( child.parentNode ); // save image parent
-								//console.log('mamy obrazek 1.1');
-								console.log(child.src);
-								if (isBigEnough(child))
-									child.src = jake;
-							}
-							if ( style.backgroundImage != "none" ) {
-								bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
-								//console.log(style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
-								//console.log('mamy obrazek 1.2');
-							}
+  						var imagesChildren = mutation.target.getElementsByTagName("IMG");
+  						for (imgChild in imagesChildren) {
+  							console.log(imagesChildren[imgChild].src);
+  							if (isBigEnough(imagesChildren[imgChild]))
+  								imagesChildren[imgChild].srcset = newSrcList;
+  						}
 
-						} );
-					}
-				}
-			}
-		});
-	}
+  						Array.prototype.forEach.call( mutation.target.children, function ( child ) {
+  							var style = child.currentStyle || window.getComputedStyle(child, false);
+  							if ( child.tagName === "IMG" || child.tagName === "img") {
+  								images.push( child.src ); // save image src
+  								image_parents.push( child.parentNode ); // save image parent
+  								//console.log('mamy obrazek 1.1');
+  								console.log(child.src);
+  								if (isBigEnough(child))
+  									child.src = jake;
+  							}
+  							if ( style.backgroundImage != "none" ) {
+  								bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
+  								//console.log(style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
+  								//console.log('mamy obrazek 1.2');
+  							}
 
-	var observer = new MutationObserver( callback );
-	var config = { 
-					characterData: true,
-					attributes: true,
-					childList: true,
-					subtree: true };
+  						} );
+  					}
+  				}
+  			}
+  		});
+  	}
 
-	observer.observe( body, config );
+  	var observer = new MutationObserver( callback );
+  	var config = {
+  					characterData: true,
+  					attributes: true,
+  					childList: true,
+  					subtree: true };
+
+  	observer.observe( body, config );
 });
 
 var newSrcList = bmo + ' 640w, ' + bmo + ' 750w, ' + bmo + ' 1080w';
