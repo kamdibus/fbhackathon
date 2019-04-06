@@ -26,15 +26,15 @@ function isAllDisabled() {
 
 
 // hack, I do it before page loads
-for (i in document.images) {
-		var image = document.images[i];
+// for (i in document.images) {
+// 		var image = document.images[i];
 		
-		console.log(isBigEnough(image));
-		if (isBigEnough(image)) {
-			image.srcset = newSrcList;
-			image.src = bmo;
-		}
-	}
+// 		console.log(isBigEnough(image));
+// 		if (isBigEnough(image)) {
+// 			image.srcset = newSrcList;
+// 			image.src = bmo;
+// 		}
+// 	}
 
 window.addEventListener('load', function () {
 	var body = document.body;
