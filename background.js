@@ -1,17 +1,16 @@
-console.log("Extension working");
-
-chrome.webRequest.onBeforeRequest.addListener(
-    function(details) {
-        console.log("blocking:", details.url);
-        return {cancel: true };
-    },
-    {urls: blocked_domains},
-    ["blocking"]
-);
-
-// window.addEventListener('load',
-//     function(details) {
-//         //document.getElementsByClassName("p");
-// 		document.body.innerHTML += "<p>test succeeded</p>";
-//     }
-// );
+window.onload = function () {
+  function loadStorage() {
+    console.log("Test storage access");
+    if(chrome.storage === null || chrome.storage === 'undefined'){
+      console.log("storage doesn't exist");
+    }
+    var enabledPlugin;
+    chrome.storage.sync.get("enabledPlugin", function(result){
+        if(result.enabledPlugin === null || result.enabledPlugin === 'undefined') {
+          chrome.storage.sync.set({"enabledPlugin": true});
+          console.log("prop set");
+        }
+    });
+  }
+  loadStorage();
+}

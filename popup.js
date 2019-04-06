@@ -1,11 +1,18 @@
 window.onload = function () {
-	function updateLabel() {
-		var enabled = chrome.extension.getBackgroundPage().enabled;
-		document.getElementById('toggle_button').value = enabled ? "Disable" : "Enable";
+  function updateLabel() {
+    var enabledPlugin;
+    chrome.storage.sync.get("enabledPlugin", function(result){
+        enabledPlugin = result.enabledPlugin;
+    });
+    console.log(enabledPlugin);
+		document.getElementById('toggle_button').value = enabledPlugin ? "Disable" : "Enable";
 	}
 	document.getElementById('toggle_button').onclick = function () {
-		var background = chrome.extension.getBackgroundPage();
-		background.enabled = !background.enabled;
+    var enabledPlugin;
+    chrome.storage.sync.get("enabledPlugin", function(result){
+        enabledPlugin = result.enabledPlugin;
+    });
+    chrome.storage.sync.set({"enabledPlugin": !enabledPlugin});
 		updateLabel();
 	};
 	updateLabel();
