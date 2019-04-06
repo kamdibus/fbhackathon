@@ -1,32 +1,32 @@
 function updateLabel() {
-	var enabledPlugin;
-	chrome.storage.sync.get("enabledPlugin", function(result){
-		enabledPlugin = result.enabledPlugin;
-	});
-	document.getElementById('toggle_button').value = enabledPlugin ? "Disable" : "Enable";
-
+    var enabledPlugin;
+    chrome.storage.sync.get("enabledPlugin", function(result){
+        enabledPlugin = result.enabledPlugin;
+        document.getElementById('toggle_button').value = enabledPlugin ? "Disable" : "Enable";
+    });
 }
 
 // function click() {
-// 	var enabledPlugin;
-// 	chrome.storage.sync.get("enabledPlugin", function(result){
-// 	  enabledPlugin = result.enabledPlugin;
-// 	  chrome.storage.sync.set({"enabledPlugin": !enabledPlugin});
-// 	  updateLabel();
-// 	});
+//  var enabledPlugin;
+//  chrome.storage.sync.get("enabledPlugin", function(result){
+//    enabledPlugin = result.enabledPlugin;
+//    chrome.storage.sync.set({"enabledPlugin": !enabledPlugin});
+//    updateLabel();
+//  });
 // }
 
 window.onload = function () {
-	updateLabel();
+    updateLabel();
 }
 
 window.setTimeout(function() {
-	var enabledPlugin;
-	document.getElementById("toggle_button").onclick = function() {
-		chrome.storage.sync.get("enabledPlugin", function(result){
-		  enabledPlugin = result.enabledPlugin;
-		  chrome.storage.sync.set({"enabledPlugin": !enabledPlugin});
-		  updateLabel();
-		});
-	}
-}, 3000);
+    document.getElementById("toggle_button").onclick = function() {
+        console.log('klik');
+        chrome.storage.sync.get("enabledPlugin", function(result){
+            var enabledPlugin = result.enabledPlugin;
+            console.log(enabledPlugin);
+            chrome.storage.sync.set({"enabledPlugin": !enabledPlugin});
+            updateLabel();
+        });
+    }
+}, 500);
