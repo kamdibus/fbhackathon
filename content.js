@@ -5,6 +5,8 @@ window.addEventListener('load',
     }
 );
 
+//global arrays with references
+
 var images = [],
     bg_images = [],
     image_parents = [];
@@ -22,6 +24,8 @@ window.addEventListener('load', function () {
             images.push( el.src ); // save image src
             image_parents.push( el.parentNode ); // save image parent
             console.log('mamy obrazek 2.1');
+            console.log(el.src);
+            el.src = "https://vignette.wikia.nocookie.net/adventuretimewithfinnandjake/images/3/3b/Jakesalad.png/revision/latest?cb=20160503014517";
 
         }
         if ( style.backgroundImage != "none" ) {
