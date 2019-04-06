@@ -8,7 +8,7 @@
   },
   "content_scripts": [{
     "js": ["content.js"],
-    "matches": ["https://blog.lateral.io/*"]
+    "matches": ["<all_urls>"]
   }],
   "manifest_version": 2
 }
