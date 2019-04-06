@@ -59,28 +59,38 @@ window.addEventListener('load', function () {
         for (i = 0; i < mutationsList.length; i++ ) {
             var mutation = mutationsList[i];
           
-            for (var j = 0; j < mutation.addedNodes.length; j++) {
-            // Check if we appended a node type that isn't
-            // an element that we can search for images inside,
-            // like a text node.
-            node = mutation.addedNodes[j];
-            if (typeof node.getElementsByTagName !== 'function') {
-                  return;
-              }
+            // for (var j = 0; j < mutation.addedNodes.length; j++) {
+            // // Check if we appended a node type that isn't
+            // // an element that we can search for images inside,
+            // // like a text node.
+            // node = mutation.addedNodes[j];
+            // if (typeof node.getElementsByTagName !== 'function') {
+            //       return;
+            //   }
 
-              var imgs = node.getElementsByTagName('img');
-              //for every new image
-              for (var k = 0; k < imgs.length; k++)
-                imgs[k].src = "https://www.partyrama.co.uk/wp-content/uploads/2015/09/adventure-time-finn-the-human-lifesize-cardboard-cutout-137cm-product-image.jpg";
-                var bmo = "https://images.discordapp.net/avatars/418412306981191680/2f2a22feae70021176e32fc8cdf91a98.png?size=512";
-                var newSrcList = bmo + ' 640w, ' + bmo + ' 750w, ' + bmo + ' 1080w';
-                imgs[k]['srcset'] = newSrcList;
-            }
+            //   var imgs = mutation.target.getElementsByTagName('img');
+            //   //for every new image
+            //   for (var k = 0; k < imgs.length; k++)
+            //     imgs[k].src = "https://www.partyrama.co.uk/wp-content/uploads/2015/09/adventure-time-finn-the-human-lifesize-cardboard-cutout-137cm-product-image.jpg";
+            //     var bmo = "https://images.discordapp.net/avatars/418412306981191680/2f2a22feae70021176e32fc8cdf91a98.png?size=512";
+            //     var newSrcList = bmo + ' 640w, ' + bmo + ' 750w, ' + bmo + ' 1080w';
+            //     imgs[k]['srcset'] = {};
+            //     imgs[k]['srcset'] = newSrcList;
+            // }
 
             if ( mutation.type == 'childList' ) {
                 console.log('NASZA MUTACJA');
                 if (mutation.target.nodename = "IMG")
                   console.log("JEST IMG");
+
+                var imagesChildren = mutation.target.getElementsByTagName("IMG");
+                console.log("DZIECI IMGI");
+                for (imgChild in imagesChildren) {
+                  var bmo = "https://images.discordapp.net/avatars/418412306981191680/2f2a22feae70021176e32fc8cdf91a98.png?size=512";
+                  var newSrcList = bmo + ' 640w, ' + bmo + ' 750w, ' + bmo + ' 1080w';
+                  imagesChildren[imgChild].srcset = newSrcList;
+                }
+
                 Array.prototype.forEach.call( mutation.target.children, function ( child ) {
                     var style = child.currentStyle || window.getComputedStyle(child, false);
                     if ( child.tagName === "IMG" || child.tagName === "img") {
