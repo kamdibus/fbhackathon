@@ -4,11 +4,14 @@
   "description": "A simple adblocker",
   "permissions": ["webRequest", "webRequestBlocking", "http://*/", "https://*/"],
   "background": {
-	"scripts": ["blocked_domains.js", "background.js"]
+	   "scripts": ["blocked_domains.js", "background.js"]
   },
   "content_scripts": [{
     "js": ["content.js"],
     "matches": ["<all_urls>"]
   }],
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
   "manifest_version": 2
 }
