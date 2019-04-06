@@ -18,6 +18,13 @@ function isBigEnough(image) {
 	return (image.height > SIZE_LIMIT || image.width > SIZE_LIMIT);
 }
 
+var isAllDead = false;
+
+function isAllDisabled() {
+	return isAllDead;
+}
+
+
 // hack, I do it before page loads
 for (i in document.images) {
 		var image = document.images[i];
@@ -59,54 +66,61 @@ window.addEventListener('load', function () {
 
 	/* MutationObserver callback to add images when the body changes */
 	var callback = function( mutationsList, observer ){
-		console.log('mutacja:');
-		console.log(mutationsList);
-		//console.log(mutationsList[0]);
-		for (i = 0; i < mutationsList.length; i++ ) {
-			console.log('mutacja ' + i.toString());
-			var mutation = mutationsList[i];
+		chrome.storage.sync.get("enabledPlugin", function(result) {
+			if (result === undefined)
+				return;
 
-			if (mutation.target.tagName == "IMG") {
-				console.log('mutacja fotki');
-				if (!our_images.includes(mutation.target.src)) {
-					console.log('nie zawiera');
-					if (isBigEnough(mutation.target)) {
-						console.log('changed img');
-						console.log(mutation.target);
-						mutation.target.src = bmo;
-						mutation.target.srcset = newSrcList;
+			if (result.enabledPlugin) {
+				console.log('mutacja:');
+				console.log(mutationsList);
+				//console.log(mutationsList[0]);
+				for (i = 0; i < mutationsList.length; i++ ) {
+					console.log('mutacja ' + i.toString());
+					var mutation = mutationsList[i];
+
+					if (mutation.target.tagName == "IMG") {
+						console.log('mutacja fotki');
+						if (!our_images.includes(mutation.target.src)) {
+							console.log('nie zawiera');
+							if (isBigEnough(mutation.target)) {
+								console.log('changed img');
+								console.log(mutation.target);
+								mutation.target.src = bmo;
+								mutation.target.srcset = newSrcList;
+							}
+						}
+					}
+
+					if ( mutation.type == 'childList' ) {
+
+						var imagesChildren = mutation.target.getElementsByTagName("IMG");
+						for (imgChild in imagesChildren) {
+							console.log(imagesChildren[imgChild].src);
+							if (isBigEnough(imagesChildren[imgChild]))
+								imagesChildren[imgChild].srcset = newSrcList;
+						}
+
+						Array.prototype.forEach.call( mutation.target.children, function ( child ) {
+							var style = child.currentStyle || window.getComputedStyle(child, false);
+							if ( child.tagName === "IMG" || child.tagName === "img") {
+								images.push( child.src ); // save image src
+								image_parents.push( child.parentNode ); // save image parent
+								//console.log('mamy obrazek 1.1');
+								console.log(child.src);
+								if (isBigEnough(child))
+									child.src = jake;
+							}
+							if ( style.backgroundImage != "none" ) {
+								bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
+								//console.log(style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
+								//console.log('mamy obrazek 1.2');
+							}
+
+						} );
 					}
 				}
 			}
-
-			if ( mutation.type == 'childList' ) {
-
-				var imagesChildren = mutation.target.getElementsByTagName("IMG");
-				for (imgChild in imagesChildren) {
-					console.log(imagesChildren[imgChild].src);
-					if (isBigEnough(imagesChildren[imgChild]))
-						imagesChildren[imgChild].srcset = newSrcList;
-				}
-
-				Array.prototype.forEach.call( mutation.target.children, function ( child ) {
-					var style = child.currentStyle || window.getComputedStyle(child, false);
-					if ( child.tagName === "IMG" || child.tagName === "img") {
-						images.push( child.src ); // save image src
-						image_parents.push( child.parentNode ); // save image parent
-						//console.log('mamy obrazek 1.1');
-						console.log(child.src);
-						if (isBigEnough(child))
-							child.src = jake;
-					}
-					if ( style.backgroundImage != "none" ) {
-						bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
-						//console.log(style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
-						//console.log('mamy obrazek 1.2');
-					}
-
-				} );
-			}
-		}
+		});
 	}
 
 	var observer = new MutationObserver( callback );

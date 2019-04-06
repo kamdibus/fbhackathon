@@ -58,13 +58,6 @@ function isDisallowed(tags, sourceImageUrl) {
 	
 	return result;
 };
-console.log('kasper sprawdza');
-console.log(isDisallowed(["cat"], "https://upload.wikimedia.org/wikipedia/commons/3/3c/Shaki_waterfall.jpg"));
-console.log(isDisallowed(["water"], "https://upload.wikimedia.org/wikipedia/commons/3/3c/Shaki_waterfall.jpg"));
-
-
-
-
 
 
 
