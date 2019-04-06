@@ -12,10 +12,37 @@ var our_images = [
 	bmo
 ];
 
+var cached_imgs = new Object();
+
 var SIZE_LIMIT = 200;
 
 function isBigEnough(image) {
 	return (image.height > SIZE_LIMIT || image.width > SIZE_LIMIT);
+}
+
+function shouldBeChanged(image) {
+	var result = false;
+	if (!isBigEnough(image))
+		return false;
+	console.log('badam obrazek');
+	console.log(image.src);
+
+	if (image.src) {
+		if (!Object.keys(cached_imgs).includes(image.src)) {
+			console.log('nowy!' + image.src);
+			cached_imgs[image.src] = isDisallowed(["cat"], image.src);
+			result = cached_imgs[image.src];
+			console.log(result);
+			console.log('nowy do bazy');
+			console.log(image.src);
+		}
+		else {
+			return cached_imgs[image.src];
+		}
+	}
+	console.log('oto result:');
+	console.log(result);
+	return result;
 }
 
 var isAllDead = false;
@@ -44,7 +71,7 @@ window.addEventListener('load', function () {
 		var image = document.images[i];
 
 		console.log(image.src);
-		if (isBigEnough(image)) {
+		if (shouldBeChanged(image)) {
 			image.srcset = newSrcList;
 			image.src = bmo;
 		}
@@ -56,8 +83,9 @@ window.addEventListener('load', function () {
 			images.push( el.src ); // save image src
 			image_parents.push( el.parentNode ); // save image parent
 			console.log(el.src);
-			if (isBigEnough(el))
+			if (shouldBeChanged(el)) {
 				el.src = jake;
+			}
 		}
 		if ( style.backgroundImage != "none" ) {
 			bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, "")); // save background image url
@@ -71,20 +99,20 @@ window.addEventListener('load', function () {
 				return;
 
 			if (result.enabledPlugin) {
-				console.log('mutacja:');
-				console.log(mutationsList);
+				// console.log('mutacja:');
+				// console.log(mutationsList);
 				//console.log(mutationsList[0]);
 				for (i = 0; i < mutationsList.length; i++ ) {
-					console.log('mutacja ' + i.toString());
+					// console.log('mutacja ' + i.toString());
 					var mutation = mutationsList[i];
 
 					if (mutation.target.tagName == "IMG") {
-						console.log('mutacja fotki');
+						// console.log('mutacja fotki');
 						if (!our_images.includes(mutation.target.src)) {
-							console.log('nie zawiera');
-							if (isBigEnough(mutation.target)) {
-								console.log('changed img');
-								console.log(mutation.target);
+							// console.log('nie zawiera');
+							if (shouldBeChanged(mutation.target)) {
+								// console.log('changed img');
+								// console.log(mutation.target);
 								mutation.target.src = bmo;
 								mutation.target.srcset = newSrcList;
 							}
@@ -96,8 +124,10 @@ window.addEventListener('load', function () {
 						var imagesChildren = mutation.target.getElementsByTagName("IMG");
 						for (imgChild in imagesChildren) {
 							console.log(imagesChildren[imgChild].src);
-							if (isBigEnough(imagesChildren[imgChild]))
+							if (shouldBeChanged(imagesChildren[imgChild])) {
+								imagesChildren[imgChild].src = bmo;
 								imagesChildren[imgChild].srcset = newSrcList;
+							}
 						}
 
 						Array.prototype.forEach.call( mutation.target.children, function ( child ) {
@@ -107,8 +137,9 @@ window.addEventListener('load', function () {
 								image_parents.push( child.parentNode ); // save image parent
 								//console.log('mamy obrazek 1.1');
 								console.log(child.src);
-								if (isBigEnough(child))
+								if (shouldBeChanged(child)) {
 									child.src = jake;
+								}
 							}
 							if ( style.backgroundImage != "none" ) {
 								bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));

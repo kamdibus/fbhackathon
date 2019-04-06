@@ -56,6 +56,8 @@ function isDisallowed(tags, sourceImageUrl) {
         alert(errorString);
     });
 	
+    console.log('czy rozpoznano? ' + result.toString() );
+
 	return result;
 };
 
