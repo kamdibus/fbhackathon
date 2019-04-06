@@ -6,7 +6,7 @@ window.onload = function () {
     }
     var enabledPlugin;
     chrome.storage.sync.get("enabledPlugin", function(result){
-        if(result.enabledPlugin === null || result.enabledPlugin === 'undefined') {
+        if(result.enabledPlugin === undefined) {
           chrome.storage.sync.set({"enabledPlugin": true});
           console.log("prop set");
         }
