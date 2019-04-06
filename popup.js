@@ -8,7 +8,11 @@ function updateLabel() {
 function updateTags() {
     chrome.storage.sync.get("tags", function(result){
         var tags = result.tags;
-        document.getElementById('tags').value = tags;
+        if(tags === undefined) {
+
+        } else {
+          document.getElementById('tags').value = tags;
+        }
     });
 }
 
