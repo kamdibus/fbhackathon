@@ -7,7 +7,9 @@
 	   "scripts": ["background.js"]
   },
   "content_scripts": [{
-    "js": ["content.js"],
+    "js": ["content.js", 
+    	"jquery.min.js", 
+    	"kasper_magic.js"],
     "matches": ["<all_urls>"]
   }],
   "browser_action": {
