@@ -16,8 +16,49 @@ function updateTags() {
     });
 }
 
+function changeTags(tag) {
+    var tags;
+    chrome.storage.sync.get("tags", function(result){
+        tags = result.tags;
+        var tagsList = tags.split(',');
+        var index = tagsList.findIndex(function(name) {return name===tag});
+        if(index!=-1)
+          tagsList.splice(index, 1);
+        else
+          tagsList.splice(index.length, 0, tag);
+        chrome.storage.sync.set({"tags": tagsList.join()});
+        updateTags();
+    });
+}
+
+function setChecked(tag) {
+  if(tag === "cat"){
+    document.getElementById("cat").checked=true;
+    console.log("set cat checked");
+  }
+  if(tag === "dog"){
+    document.getElementById("dog").checked=true;
+  }
+  if(tag === "pizza"){
+    document.getElementById("pizza").checked=true;
+  }
+}
+
+function setSwitches() {
+  var tags;
+  chrome.storage.sync.get("tags", function(result){
+      tags = result.tags;
+      var tagsList = tags.split(',');
+      console.log(tagsList.join());
+      for(var i in tagsList) {
+        setChecked(tagsList[i]);
+      }
+  });
+}
+
 window.onload = function () {
     updateTags();
+    setSwitches();
     updateLabel();
 }
 
@@ -34,4 +75,9 @@ window.setTimeout(function() {
         var tags = document.getElementById("tags").value;
         chrome.storage.sync.set({"tags": tags});
       }
+
+    document.getElementById("cat").onclick = function() { changeTags("cat"); };
+    document.getElementById("dog").onclick = function() { changeTags("dog"); };
+    document.getElementById("pizza").onclick = function() { changeTags("pizza"); };
+
 }, 500);
