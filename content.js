@@ -40,9 +40,9 @@ function shouldBeChanged(image, tag) {
 	      	isDisallowed(actualTags, image.src, function(isDis) {
 	        	if (isDis) {
 	          		localStorage.setItem(image.src, actualTags[0]);
-	          	image.srcset = newSrcList;
+	          		image.srcset = newSrcList;
 	        	} else {
-	          		localStorage.setItem(image.src, '-' + actualTags[0]);
+	          		localStorage.setItem(image.src, '%');
 		          return false;
 		        }
 		      });
@@ -54,10 +54,13 @@ function shouldBeChanged(image, tag) {
 		  		actualTags.pop()
 		     	console.log('tagi teraz ' + actualTags[0]);
 		     	console.log('fotka ma ' + localStorage.getItem(image.src));
-		      	if (localStorage.getItem(image.src) == actualTags[0] || 
-		      		localStorage.getItem(image.src) == ('-' + actualTags[0]))
+		      	if (localStorage.getItem(image.src) == actualTags[0]) {
 		      		image.srcset = newSrcList;
-		      });
+		      	}
+		      	
+		      	
+
+		    });
 	    }
   }
   return false;
@@ -76,7 +79,7 @@ function getTags() {
 
 window.addEventListener('load', function() {
   	var body = document.body;
-	var elements = document.body.getElementsByTagName("*");
+	//var elements = document.body.getElementsByTagName("*");
 
   var howMany = 0;
   for (i in document.images) {
@@ -136,7 +139,7 @@ window.addEventListener('load', function() {
     subtree: true
   };
 
-  observer.observe(body, config);
+  //observer.observe(body, config);
 });
 
 var busted = 'https://i.imgur.com/rvXqGUD.png';

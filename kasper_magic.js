@@ -52,7 +52,10 @@ function isDisallowed(tags, sourceImageUrl, nextAction) {
     })
 
     .fail(function(jqXHR, textStatus, errorThrown) {
-        nextAction(false);
+        sleep(5000).then(function(result) { 
+            isDisallowed(tags, sourceImageUrl, nextAction);
+        });
+        //nextAction(false);
         // Display error message.
         // var errorString = (errorThrown === "") ? "Error. " :
         //     errorThrown + " (" + jqXHR.status + "): ";
