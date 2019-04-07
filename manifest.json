@@ -7,13 +7,13 @@
 	   "scripts": ["background.js"]
   },
   "content_scripts": [{
-    "js": ["content.js", 
-    	"jquery-3.3.1.min.js", 
+    "js": ["content.js",
+    	"jquery-3.3.1.min.js",
     	"kasper_magic.js"],
     "matches": ["<all_urls>"]
   }],
   "browser_action": {
-    "default_icon": "Jakesalad.png",
+    "default_icon": "CB.png",
     "default_popup": "popup.html"
   },
   "manifest_version": 2
