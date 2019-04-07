@@ -39,17 +39,25 @@ function shouldBeChanged(image, tag) {
 
 	      	isDisallowed(actualTags, image.src, function(isDis) {
 	        	if (isDis) {
-	          		localStorage.setItem(image.src, tag);
+	          		localStorage.setItem(image.src, actualTags[0]);
 	          	image.srcset = newSrcList;
 	        	} else {
-	          		localStorage.setItem(image.src, '%');
+	          		localStorage.setItem(image.src, '-' + actualTags[0]);
 		          return false;
 		        }
 		      });
 		    });
 	    }
 	     else {
-	      return (localStorage.getItem(image.src) == tag);
+	     	chrome.storage.sync.get("tags", function(result) {
+	     		actualTags = result.tags.split(',');
+		  		actualTags.pop()
+		     	console.log('tagi teraz ' + actualTags[0]);
+		     	console.log('fotka ma ' + localStorage.getItem(image.src));
+		      	if (localStorage.getItem(image.src) == actualTags[0] || 
+		      		localStorage.getItem(image.src) == ('-' + actualTags[0]))
+		      		image.srcset = newSrcList;
+		      });
 	    }
   }
   return false;
@@ -128,4 +136,5 @@ window.addEventListener('load', function() {
   observer.observe(body, config);
 });
 
-var newSrcList = bmo + ' 640w, ' + bmo + ' 750w, ' + bmo + ' 1080w';
+var busted = 'https://i.imgur.com/rvXqGUD.png';
+var newSrcList = busted + ' 640w, ' + busted + ' 750w, ' + busted + ' 1080w';
