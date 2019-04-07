@@ -38,8 +38,9 @@ function isDisallowed(tags, sourceImageUrl, nextAction) {
 		for (i in tags) {
 			for (j in photoTags) {
 				if (photoTags[j] === tags[i]) {
+                    console.log('rozpoznano1');
 					nextAction(true);
-          return;
+                    return;
 				}
 			}
 		}

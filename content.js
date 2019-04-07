@@ -18,16 +18,6 @@ function isBigEnough(image) {
   return (image.height > SIZE_LIMIT || image.width > SIZE_LIMIT);
 }
 
-function willBeChecked(image) {
-  if (!isBigEnough(image))
-    return false;
-
-  if (image.src) {
-    return (!Object.keys(cached_imgs).includes(image.src));
-  }
-  return false;
-}
-
 var defaultTag = 'dog';
 
 function shouldBeChanged(image, tag) {
@@ -39,21 +29,30 @@ function shouldBeChanged(image, tag) {
 
   if (image.src) {
     if (!localStorage.getItem(image.src)) {
-      console.log('nowy!' + image.src);
-      isDisallowed([tag], image.src, function(isDis) {
-        if (isDis) {
-          localStorage.setItem(image.src, tag);
-          return true;
-        } else {
-          localStorage.setItem(image.src, '%');
-          return false;
-        }
-      });
-    } else {
-      return (localStorage.getItem(image.src) == tag);
-    }
+      	console.log('nowy!' + image.src);
+      	chrome.storage.sync.get("tags", function(result) {
+      		console.log('dupa');
+		  	actualTags = result.tags.split(',');
+		  	actualTags.pop()
+		  	console.log('tagi: ');
+		  	console.log(actualTags);
+
+	      	isDisallowed(actualTags, image.src, function(isDis) {
+	        	if (isDis) {
+	          		localStorage.setItem(image.src, tag);
+	          	image.srcset = newSrcList;
+	        	} else {
+	          		localStorage.setItem(image.src, '%');
+		          return false;
+		        }
+		      });
+		    });
+	    }
+	     else {
+	      return (localStorage.getItem(image.src) == tag);
+	    }
   }
-  return result;
+  return false;
 }
 
 var isAllDead = false;
@@ -64,10 +63,13 @@ function isAllDisabled() {
 
 var imgs_to_check = [];
 
-// function getTags() {
-// 	chrome.storage.sync.get("tags", function(result) {});
-// 	ret
-// }
+var actualTags = [];
+
+function getTags() {
+	chrome.storage.sync.get("tags", function(result) {
+		actualTags = result.tags.split(',');
+	});
+}
 
 
 window.addEventListener('load', function() {
@@ -119,7 +121,6 @@ window.addEventListener('load', function() {
                 imagesChildren[imgChild].srcset = newSrcList;
               }
             }
-
           }
         }
       }
