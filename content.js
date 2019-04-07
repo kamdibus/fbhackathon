@@ -46,19 +46,7 @@ function shouldBeChanged(image, tag) {
   return result;
 }
 
-var isAllDead = false;
-
-function isAllDisabled() {
-  return isAllDead;
-}
-
 var imgs_to_check = [];
-
-// function getTags() {
-// 	chrome.storage.sync.get("tags", function(result) {});
-// 	ret
-// }
-
 
 window.addEventListener('load', function() {
   var body = document.body;
@@ -75,7 +63,6 @@ window.addEventListener('load', function() {
       image.src = bmo;
     }
   }
-
 
   /* MutationObserver callback to add images when the body changes */
   var callback = function(mutationsList, observer) {
