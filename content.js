@@ -75,6 +75,9 @@ function getTags() {
 
 
 window.addEventListener('load', function() {
+  	var body = document.body;
+	var elements = document.body.getElementsByTagName("*");
+
   var howMany = 0;
   for (i in document.images) {
     var image = document.images[i];
