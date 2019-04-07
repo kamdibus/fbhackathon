@@ -18,16 +18,6 @@ function isBigEnough(image) {
   return (image.height > SIZE_LIMIT || image.width > SIZE_LIMIT);
 }
 
-function willBeChecked(image) {
-  if (!isBigEnough(image))
-    return false;
-
-  if (image.src) {
-    return (!Object.keys(cached_imgs).includes(image.src));
-  }
-  return false;
-}
-
 var defaultTag = 'dog';
 
 function shouldBeChanged(image, tag) {
@@ -56,19 +46,7 @@ function shouldBeChanged(image, tag) {
   return result;
 }
 
-var isAllDead = false;
-
-function isAllDisabled() {
-  return isAllDead;
-}
-
 var imgs_to_check = [];
-
-// function getTags() {
-// 	chrome.storage.sync.get("tags", function(result) {});
-// 	ret
-// }
-
 
 window.addEventListener('load', function() {
   var body = document.body;
@@ -84,8 +62,7 @@ window.addEventListener('load', function() {
       image.srcset = newSrcList;
       image.src = bmo;
     }
-  } 
-
+  }
 
   /* MutationObserver callback to add images when the body changes */
   var callback = function(mutationsList, observer) {
