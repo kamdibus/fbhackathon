@@ -20,27 +20,34 @@ function changeTags(tag) {
     var tags;
     chrome.storage.sync.get("tags", function(result){
         tags = result.tags;
-        var tagsList = tags.split(',');
-        var index = tagsList.findIndex(function(name) {return name===tag});
-        if(index!=-1)
-          tagsList.splice(index, 1);
-        else
-          tagsList.splice(index.length, 0, tag);
-        chrome.storage.sync.set({"tags": tagsList.join()});
-        updateTags();
+        if(tags === undefined){
+          document.getElementById('tags').value += tag + ',';
+          chrome.storage.sync.set({"tags": tag + ','});
+        } else {
+          var tagsList = tags.split(',');
+          var index = tagsList.findIndex(function(name) {return name===tag});
+          if(index!=-1)
+            tagsList.splice(index, 1);
+          else
+            tagsList.splice(index.length, 0, tag);
+          chrome.storage.sync.set({"tags": tagsList.join()});
+          updateTags();
+        }
     });
 }
 
 function setChecked(tag) {
   if(tag === "cat"){
     document.getElementById("cat").checked=true;
-    console.log("set cat checked");
+    return;
   }
   if(tag === "dog"){
     document.getElementById("dog").checked=true;
+    return;
   }
   if(tag === "pizza"){
     document.getElementById("pizza").checked=true;
+    return;
   }
 }
 
@@ -48,10 +55,14 @@ function setSwitches() {
   var tags;
   chrome.storage.sync.get("tags", function(result){
       tags = result.tags;
-      var tagsList = tags.split(',');
-      console.log(tagsList.join());
-      for(var i in tagsList) {
-        setChecked(tagsList[i]);
+      if(tags === undefined){
+
+      } else {
+        var tagsList = tags.split(',');
+        console.log(tagsList.join());
+        for(var i in tagsList) {
+          setChecked(tagsList[i]);
+        }
       }
   });
 }
