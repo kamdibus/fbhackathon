@@ -30,7 +30,7 @@ function willBeChecked(image) {
 	return false;
 }
 
-function shouldBeChanged(image) {
+function shouldBeChanged(image, tag) {
 	var result = false;
 	if (!isBigEnough(image))
 		return false;
@@ -38,16 +38,19 @@ function shouldBeChanged(image) {
 	console.log(image.src);
 
 	if (image.src) {
-		if (!Object.keys(cached_imgs).includes(image.src)) {
+		if (!localStorage.getItem(image.src)) {
 			console.log('nowy!' + image.src);
-			cached_imgs[image.src] = isDisallowed(["dog"], image.src);
-			result = cached_imgs[image.src];
-			console.log(result);
-			console.log('nowy do bazy');
-			console.log(image.src);
+			if (isDisallowed([tag], image.src)) {
+				localStorage.setItem(image.src, tag);
+				return true;
+			}
+			else {
+				localStorage.setItem(image.src, '%');
+				return false;
+			}
 		}
 		else {
-			return cached_imgs[image.src];
+			return (localStorage.getItem(image.src) == tag);
 		}
 	}
 	console.log('oto result:');
@@ -75,13 +78,12 @@ function isAllDisabled() {
 
 var imgs_to_check = [];
 
-window.addEventListener('load', async function () {
+window.addEventListener('load', function () {
 	var body = document.body;
 	var elements = document.body.getElementsByTagName("*");
 
 	var howMany = 0;
 	for (i in document.images) {
-		var modif = async function() {
 			var image = document.images[i];
 			if (willBeChecked(image))
 				howMany++;
@@ -91,8 +93,6 @@ window.addEventListener('load', async function () {
 				image.srcset = newSrcList;
 				image.src = bmo;
 			}
-		};
-		modif();
 	} //szybciej 1
 	console.log('partia 1: ' + howMany.toString());
 	
@@ -100,7 +100,7 @@ window.addEventListener('load', async function () {
 
 	/* MutationObserver callback to add images when the body changes */
 	var callback = function( mutationsList, observer ){
-		chrome.storage.sync.get("enabledPlugin", async function(result) {
+		chrome.storage.sync.get("enabledPlugin", function(result) {
 			if (result === undefined)
 				return;
 
@@ -109,7 +109,6 @@ window.addEventListener('load', async function () {
 				var howMany2 = 0;
 				for (i = 0; i < mutationsList.length; i++ ) {
 					var mutation = mutationsList[i];
-					var modif = async function() {
 					if (mutation.target.tagName == "IMG") {
 							if (!our_images.includes(mutation.target.src)) {
 								if (willBeChecked(mutation.target))
@@ -122,8 +121,7 @@ window.addEventListener('load', async function () {
 								}
 							}
 						}
-					};
-					modif();
+					
 
 					if ( mutation.type == 'childList' ) {
 						var howMany = 0;
