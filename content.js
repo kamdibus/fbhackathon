@@ -18,16 +18,6 @@ function isBigEnough(image) {
   return (image.height > SIZE_LIMIT || image.width > SIZE_LIMIT);
 }
 
-function willBeChecked(image) {
-  if (!isBigEnough(image))
-    return false;
-
-  if (image.src) {
-    return (!Object.keys(cached_imgs).includes(image.src));
-  }
-  return false;
-}
-
 var defaultTag = 'dog';
 
 function shouldBeChanged(image, tag) {
@@ -84,7 +74,7 @@ window.addEventListener('load', function() {
       image.srcset = newSrcList;
       image.src = bmo;
     }
-  } 
+  }
 
 
   /* MutationObserver callback to add images when the body changes */
