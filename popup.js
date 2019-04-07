@@ -64,6 +64,7 @@ function setSwitches() {
           setChecked(tagsList[i]);
         }
       }
+      updateTags();
   });
 }
 

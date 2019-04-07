@@ -3,6 +3,10 @@ var script = document.createElement('script');
 script.src = '//code.jquery.com/jquery-1.11.0.min.js';
 document.getElementsByTagName('head')[0].appendChild(script);
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function isDisallowed(tags, sourceImageUrl, nextAction) {
 	var subscriptionKey = "3ed0821c8842487585465180795285b8";
 
@@ -57,5 +61,4 @@ function isDisallowed(tags, sourceImageUrl, nextAction) {
         // alert(errorString);
     });
 
-    console.log('czy rozpoznano? ' + result.toString() );
 };

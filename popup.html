@@ -1,57 +1,56 @@
-<!DOCTYPE html>
 <html>
 
 <head>
-  <title>Bootstrap Example</title>
+  <title>Cats Busters</title>
   <script src="popup.js"></script>
   <meta charset="utf-8">
-  <link type="text/css" rel="stylesheet" href="normalize.css"/>
-  <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
-  <link rel="stylesheet" type="text/css" href="style.css"/>
+  <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body class="w-200">
-  <h3 class="name">CatBlocker</h3>
-  <table>
-    <tr>
-      <td>
-        <img style="background-color: #eb94d0;" src="https://banner2.kisspng.com/20180810/wa/kisspng-nyan-cat-gif-youtube-image-pianistcraft-amp-apos-s-profile-5b6d28f1481f16.0281532415338805612954.jpg" alt="Cats" height="50" width="50">
-      </td>
-      <td>
-        <label class="switch">
-          <input id="cat" type="checkbox">
-          <span class="slider round"></span>
-        </label>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <img src="http://pixelartmaker.com/art/b99adcb69fb278f.png" alt="Cats" height="50" width="50">
-      </td>
-      <td>
-        <label class="switch">
-          <input id="dog"  type="checkbox">
-          <span class="slider round"></span>
-        </label>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <img src="https://clipart.wpblink.com/sites/default/files/wallpaper/pixel-clipart/190127/pixel-clipart-pizza-190127-3588413.jpg" alt="Cats" height="50" width="50">
-      </td>
-      <td>
-        <label class="switch">
-          <input id="pizza" type="checkbox">
-          <span class="slider round"></span>
-        </label>
-      </td>
-    </tr>
-  </table>
+<body class="w-100">
+  <img class="main" src='image.png' width=80%>
+  <div align="center">
+    <table min-width:100%>
+      <tr>
+        <td>
+          <img src="https://banner2.kisspng.com/20180810/wa/kisspng-nyan-cat-gif-youtube-image-pianistcraft-amp-apos-s-profile-5b6d28f1481f16.0281532415338805612954.jpg" alt="Cats" height="50" width="50">
+        </td>
+        <td>
+          <label class="switch">
+            <input id="cat" type="checkbox">
+            <span class="slider round"></span>
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <img src="http://pixelartmaker.com/art/b99adcb69fb278f.png" alt="Cats" height="50" width="50">
+        </td>
+        <td>
+          <label class="switch">
+            <input id="dog" type="checkbox">
+            <span class="slider round"></span>
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <img src="https://clipart.wpblink.com/sites/default/files/wallpaper/pixel-clipart/190127/pixel-clipart-pizza-190127-3588413.jpg" alt="Cats" height="50" width="50">
+        </td>
+        <td>
+          <label class="switch">
+            <input id="pizza" type="checkbox">
+            <span class="slider round"></span>
+          </label>
+        </td>
+      </tr>
+    </table>
+  </div>
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="md-form mb-4 pink-textarea active-pink-textarea">
-        <textarea placeholder="Enter tags here" id="tags" class="md-textarea form-control" rows="2" columns="10"></textarea>
-        <!-- <label for="form18">Material textarea colorful on :focus state</label> -->
+        <textarea placeholder="Enter tags here" id="tags" class="md-textarea form-control" rows="2" columns="20"></textarea>
       </div>
     </div>
   </div>
