@@ -40,7 +40,6 @@ function shouldBeChanged(image, tag) {
         }
       });
     } else {
-      return (localStorage.getItem(image.src) == tag);
     }
   }
   return result;
@@ -49,9 +48,6 @@ function shouldBeChanged(image, tag) {
 var imgs_to_check = [];
 
 window.addEventListener('load', function() {
-  var body = document.body;
-  var elements = document.body.getElementsByTagName("*");
-
   var howMany = 0;
   for (i in document.images) {
     var image = document.images[i];

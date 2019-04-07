@@ -42,14 +42,14 @@ function isDisallowed(tags, sourceImageUrl, nextAction) {
 		for (i in tags) {
 			for (j in photoTags) {
 				if (photoTags[j] === tags[i]) {
-					nextAction(true);
           console.log('czy rozpoznano? - tak');
+					nextAction(true);
           return;
 				}
 			}
 		}
-    nextAction(false);
     console.log('czy rozpoznano? - nie');
+    nextAction(false);
     })
 
     .fail(function(jqXHR, textStatus, errorThrown) {
