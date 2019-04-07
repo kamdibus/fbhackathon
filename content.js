@@ -20,6 +20,16 @@ function isBigEnough(image) {
 	return (image.height > SIZE_LIMIT || image.width > SIZE_LIMIT);
 }
 
+function willBeChecked(image) {
+	if (!isBigEnough(image))
+		return false;
+
+	if (image.src) {
+		 return (!Object.keys(cached_imgs).includes(image.src));
+	}
+	return false;
+}
+
 function shouldBeChanged(image) {
 	var result = false;
 	if (!isBigEnough(image))
@@ -30,7 +40,7 @@ function shouldBeChanged(image) {
 	if (image.src) {
 		if (!Object.keys(cached_imgs).includes(image.src)) {
 			console.log('nowy!' + image.src);
-			cached_imgs[image.src] = isDisallowed(["cat"], image.src);
+			cached_imgs[image.src] = isDisallowed(["dog"], image.src);
 			result = cached_imgs[image.src];
 			console.log(result);
 			console.log('nowy do bazy');
@@ -55,7 +65,7 @@ function isAllDisabled() {
 // hack, I do it before page loads
 // for (i in document.images) {
 // 		var image = document.images[i];
-		
+
 // 		console.log(isBigEnough(image));
 // 		if (isBigEnough(image)) {
 // 			image.srcset = newSrcList;
@@ -63,94 +73,96 @@ function isAllDisabled() {
 // 		}
 // 	}
 
-window.addEventListener('load', function () {
+var imgs_to_check = [];
+
+window.addEventListener('load', async function () {
 	var body = document.body;
 	var elements = document.body.getElementsByTagName("*");
 
+	var howMany = 0;
 	for (i in document.images) {
-		var image = document.images[i];
-
-		console.log(image.src);
-		if (shouldBeChanged(image)) {
-			image.srcset = newSrcList;
-			image.src = bmo;
-		}
-	}
-	
-	Array.prototype.forEach.call( elements, function ( el ) {
-		var style = window.getComputedStyle( el, false );
-		if ( el.tagName === "IMG" || el.tagName === "img") {
-			images.push( el.src ); // save image src
-			image_parents.push( el.parentNode ); // save image parent
-			console.log(el.src);
-			if (shouldBeChanged(el)) {
-				el.src = jake;
+		var modif = async function() {
+			var image = document.images[i];
+			if (willBeChecked(image))
+				howMany++;
+			if (shouldBeChanged(image)) {
+				console.log('zrodlo 1');
+				
+				image.srcset = newSrcList;
+				image.src = bmo;
 			}
-		}
-		if ( style.backgroundImage != "none" ) {
-			bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, "")); // save background image url
-		}
-	});
+		};
+		modif();
+	} //szybciej 1
+	console.log('partia 1: ' + howMany.toString());
+	
+
 
 	/* MutationObserver callback to add images when the body changes */
 	var callback = function( mutationsList, observer ){
-		chrome.storage.sync.get("enabledPlugin", function(result) {
+		chrome.storage.sync.get("enabledPlugin", async function(result) {
 			if (result === undefined)
 				return;
 
 			if (result.enabledPlugin) {
-				// console.log('mutacja:');
-				// console.log(mutationsList);
-				//console.log(mutationsList[0]);
-				for (i = 0; i < mutationsList.length; i++ ) {
-					// console.log('mutacja ' + i.toString());
-					var mutation = mutationsList[i];
 
+				var howMany2 = 0;
+				for (i = 0; i < mutationsList.length; i++ ) {
+					var mutation = mutationsList[i];
+					var modif = async function() {
 					if (mutation.target.tagName == "IMG") {
-						// console.log('mutacja fotki');
-						if (!our_images.includes(mutation.target.src)) {
-							// console.log('nie zawiera');
-							if (shouldBeChanged(mutation.target)) {
-								// console.log('changed img');
-								// console.log(mutation.target);
-								mutation.target.src = bmo;
-								mutation.target.srcset = newSrcList;
+							if (!our_images.includes(mutation.target.src)) {
+								if (willBeChecked(mutation.target))
+									howMany2++;
+								if (shouldBeChanged(mutation.target)) {
+									console.log('zrodlo 2');
+									
+									mutation.target.src = bmo;
+									mutation.target.srcset = newSrcList;
+								}
 							}
 						}
-					}
+					};
+					modif();
 
 					if ( mutation.type == 'childList' ) {
-
+						var howMany = 0;
 						var imagesChildren = mutation.target.getElementsByTagName("IMG");
 						for (imgChild in imagesChildren) {
-							console.log(imagesChildren[imgChild].src);
+							if (willBeChecked(imagesChildren[imgChild]))
+								howMany++;
 							if (shouldBeChanged(imagesChildren[imgChild])) {
+								console.log('zrodlo 3');
+								
 								imagesChildren[imgChild].src = bmo;
 								imagesChildren[imgChild].srcset = newSrcList;
 							}
-						}
+						} 
+						console.log('partia zawierała ' + howMany.toString());
+						//szybciej 3
+						var howMany3 = 0;
 
-						Array.prototype.forEach.call( mutation.target.children, function ( child ) {
-							var style = child.currentStyle || window.getComputedStyle(child, false);
-							if ( child.tagName === "IMG" || child.tagName === "img") {
-								images.push( child.src ); // save image src
-								image_parents.push( child.parentNode ); // save image parent
-								//console.log('mamy obrazek 1.1');
-								console.log(child.src);
-								if (shouldBeChanged(child)) {
-									child.src = jake;
-								}
-							}
-							if ( style.backgroundImage != "none" ) {
-								bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
-								//console.log(style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
-								//console.log('mamy obrazek 1.2');
-							}
+						// Array.prototype.forEach.call( mutation.target.children, function ( child ) {
+						// 	var style = child.currentStyle || window.getComputedStyle(child, false);
+						// 	if ( child.tagName === "IMG" || child.tagName === "img") {
+						// 		images.push( child.src ); // save image src
+						// 		image_parents.push( child.parentNode ); // save image parent
+						// 		if (shouldBeChanged(child)) {
+						// 			howMany3++;
+						// 			child.src = jake;
+						// 		}
+						// 	}
+						// 	if ( style.backgroundImage != "none" ) {
+						// 		bg_images.push( style.backgroundImage.slice( 4, -1 ).replace(/['"]/g, ""));
+						// 	}
 
-						} );
+						// } );
+						console.log('partia4 zawiera ' + howMany3.toString());
 					}
 				}
+				console.log('partia3 zawiera ' + howMany2.toString());
 			}
+			console.log('ile w cache? ' + Object.keys(cached_imgs).length.toString());
 		});
 	}
 
