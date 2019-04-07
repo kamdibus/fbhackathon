@@ -30,6 +30,8 @@ function willBeChecked(image) {
 	return false;
 }
 
+var defaultTag = 'dog';
+
 function shouldBeChanged(image, tag) {
 	var result = false;
 	if (!isBigEnough(image))
@@ -87,7 +89,7 @@ window.addEventListener('load', function () {
 			var image = document.images[i];
 			if (willBeChecked(image))
 				howMany++;
-			if (shouldBeChanged(image)) {
+			if (shouldBeChanged(image, defaultTag)) {
 				console.log('zrodlo 1');
 				
 				image.srcset = newSrcList;
@@ -113,7 +115,7 @@ window.addEventListener('load', function () {
 							if (!our_images.includes(mutation.target.src)) {
 								if (willBeChecked(mutation.target))
 									howMany2++;
-								if (shouldBeChanged(mutation.target)) {
+								if (shouldBeChanged(mutation.target, defaultTag)) {
 									console.log('zrodlo 2');
 									
 									mutation.target.src = bmo;
@@ -129,7 +131,7 @@ window.addEventListener('load', function () {
 						for (imgChild in imagesChildren) {
 							if (willBeChecked(imagesChildren[imgChild]))
 								howMany++;
-							if (shouldBeChanged(imagesChildren[imgChild])) {
+							if (shouldBeChanged(imagesChildren[imgChild], defaultTag)) {
 								console.log('zrodlo 3');
 								
 								imagesChildren[imgChild].src = bmo;
